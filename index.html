@@ -5,7 +5,7 @@
 body {margin:0px;}
 * {box-sizing:border-box;outline:none;}
 #content {border:3px solid black;height:5000px;left:0%;right:20%;position:absolute;top:100px;}
-#menu {border-left:3px solid black;border-right:3px solid black;height:500px;left:80%;right:0%;position:absolute;top:125px;background-color:#757575;border-top:none;overflow:auto;}
+#menu {border-left:3px solid black;border-right:3px solid black;height:500px;left:80%;right:0%;position:absolute;top:178px;background-color:#757575;border-top:none;overflow:auto;}
 .menuSpan {color:white;font-weight:bold;font-family:arial;left:5%;right:5%;position:absolute;text-align:center;}
 input {width:100%;position:absolute;background-color:#0cc0bd;text-align:center;font-weight:bold;font-family:arial;font-size:20px;height:25px;top:25px;border:none;}
 .hexColor {top:60px;position:absolute;left:5%;right:5%;text-align:center;font-weight:bold;font-family:arial;color:#58DAB3;font-size:20px;}
@@ -13,21 +13,29 @@ input {width:100%;position:absolute;background-color:#0cc0bd;text-align:center;f
 textarea {width:100%;max-width:100%;min-width:100%;height:300px;min-height:300px;max-height:300px;font-weight:bold;font-family:arial;font-size:20px;height:25px;top:25px;border:none;background-color:#0cc0bd;}
 #lockStyles {top:250px;position:relative;background-color:#0c5a58;border:none;width:100%;text-align:center;}
 #menuBackground {border:3px solid black;height:4900px;left:80%;right:0%;position:absolute;top:100px;background-color:#757575;}
-#insert {width:100%;position:absolute;background-color:#0cc0bd;text-align:center;font-weight:bold;font-family:arial;font-size:20px;height:25px;top:0px;border:none;}
+#insert,#save,#load {width:100%;position:absolute;background-color:#0cc0bd;text-align:center;font-weight:bold;font-family:arial;font-size:20px;height:25px;border:none;border-bottom:3px solid black;}
 #logo {width:130px;height:100px;top:0px;left:0px;position:absolute;}
 #advert {width:100px;height:100px;top:0px;right:0px;position:absolute;}
 #title {left:130px;right:100px;position:absolute;text-align:center;font-size:70px;top:-47px;font-family:arial;background-color:#323232;color:#a80000;height:100px;}
+#insert {top:0px;}
+#save {top:25px;}
+#load {top:50px;}
 </style>
 </head>
 <body>
 <img id="logo" src="logo.png">
 <a href="https://www.roblox.com/games/5012201557" id="advert"><img style="width:100%;height:100%;position:absolute" src="advert1.png"></a>
 <h1 id="title">CyberChill Design Creator</h1>
-<div id="content" onclick="menu(this)"></div>
-<div id="menuBackground"><button id="insert" onclick="insert(Number(this.className))" class="0">Insert block</button></div>
+<div id="content" onclick="menu(this)"><div id="idCounter" style="display:none;">0</div></div>
+<div id="menuBackground">
+<button id="insert" onclick="insert(Number(document.getElementById('idCounter').innerHTML))">Insert object</button>
+<button id="save" onclick="localStorage.ccdesigncreatorsave = document.getElementById('content').innerHTML">Save</button>
+<button id="load" onclick="document.getElementById('content').innerHTML = localStorage.ccdesigncreatorsave">Load</button>
+</div>
 <div id="menu" style="display:none;">
 <br>
 <input id="object" value="" style="display:none;">
+<div class="menuDiv"><input type="button" id="remove" value="Remove Object" onclick="document.getElementById(document.getElementById('object').value).remove()"></div><br>
 <div class="menuDiv"><span class="menuSpan">Background Color</span><br><input type="color" id="backgroundColor" value="#999999" oninput="document.getElementById('backgroundColorHex').innerHTML = this.value"><span class="hexColor" id="backgroundColorHex">#999999</span></div><br>
 <div class="menuDiv"><span class="menuSpan">Color</span><br><input type="color" id="color" value="#000000" oninput="document.getElementById('colorHex').innerHTML = this.value"><span class="hexColor" id="colorHex">#000000</span></div><br>
 <div class="menuDiv"><span class="menuSpan">Width (pixels)</span><br><input type="number" id="width" value="100"></div><br>
@@ -89,7 +97,7 @@ sessionStorage.moveObjectId = object.id
 
 function insert(identification) {
 document.getElementById("content").innerHTML += '<div id="object'+String(identification)+'" style="height:100px;width:100px;background-color:rgb(150,150,150);color:rgb(0,0,0);position:absolute;font-family:arial;font-size:20px;border-round:0px;border:0px solid rgb(0,0,0);text-align:left;" onclick="menu(this)" ondblclick="move()"></div>'
-document.getElementById("insert").className = String(identification+1)
+document.getElementById("idCounter").innerHTML = String(identification+1)
 }
 
 function denaryToHex(denary) {
@@ -143,6 +151,7 @@ setInterval(clock,50)
 function clock() {
 var object;
 if(document.getElementById("object").value != "" && document.getElementById("styleLock").alt == "open") {
+
 	object = document.getElementById(document.getElementById("object").value)
 	object.style.backgroundColor = document.getElementById("backgroundColor").value
 	object.style.color = document.getElementById("color").value
