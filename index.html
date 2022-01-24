@@ -150,7 +150,7 @@ setInterval(clock,50)
 
 function clock() {
 var object;
-if(document.getElementById("object").value != "" && document.getElementById("styleLock").alt == "open") {
+if(document.getElementById("object").value != "" && document.getElementById("styleLock").alt == "open" && document.getElementById(document.getElementById("object").value) != null) {
 
 	object = document.getElementById(document.getElementById("object").value)
 	object.style.backgroundColor = document.getElementById("backgroundColor").value
