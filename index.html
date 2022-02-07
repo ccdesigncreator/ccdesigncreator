@@ -2,24 +2,35 @@
 <html>
 <head>
 <style>
-body {margin:0px;}
-* {box-sizing:border-box;outline:none;}
+body {margin:0px;background-color:rgb(30,30,30)	;}
+* {box-sizing:border-box;outline:none;cursor:url(cursor.cur),auto;}
 #content {border:3px solid black;height:5000px;left:0%;right:20%;position:absolute;top:100px;}
-#menu {border-left:3px solid black;border-right:3px solid black;height:500px;left:80%;right:0%;position:absolute;top:178px;background-color:#757575;border-top:none;overflow:auto;}
+#menu {border-left:3px solid black;border-right:3px solid black;height:500px;left:80%;right:0%;position:absolute;top:153px;background-color:#757575;border-top:none;overflow:auto;}
 .menuSpan {color:white;font-weight:bold;font-family:arial;left:5%;right:5%;position:absolute;text-align:center;}
 input {width:100%;position:absolute;background-color:#0cc0bd;text-align:center;font-weight:bold;font-family:arial;font-size:20px;height:25px;top:25px;border:none;}
 .hexColor {top:60px;position:absolute;left:5%;right:5%;text-align:center;font-weight:bold;font-family:arial;color:#58DAB3;font-size:20px;}
 .menuDiv {position:relative;height:80px;}
 textarea {width:100%;max-width:100%;min-width:100%;height:300px;min-height:300px;max-height:300px;font-weight:bold;font-family:arial;font-size:20px;height:25px;top:25px;border:none;background-color:#0cc0bd;}
 #lockStyles {top:0px;position:relative;background-color:#0c5a58;border:none;width:100%;text-align:center;}
-#menuBackground {border:3px solid black;height:4900px;left:80%;right:0%;position:absolute;top:100px;background-color:#757575;}
-#insert,#save,#load {width:100%;position:absolute;background-color:#0cc0bd;text-align:center;font-weight:bold;font-family:arial;font-size:20px;height:25px;border:none;border-bottom:3px solid black;}
+#menuBackground {border:3px solid black;height:5000px;left:80%;right:0%;position:absolute;top:100px;background-color:#757575;}
+#insert,#fileButton {width:100%;position:absolute;background-color:#0cc0bd;text-align:center;font-weight:bold;font-family:arial;font-size:20px;height:25px;border:none;border-bottom:3px solid black;}
 #logo {width:130px;height:100px;top:0px;left:0px;position:absolute;}
 #advert {width:100px;height:100px;top:0px;right:0px;position:absolute;}
 #title {left:130px;right:100px;position:absolute;text-align:center;font-size:70px;top:-47px;font-family:arial;background-color:#323232;color:#a80000;height:100px;}
 #insert {top:0px;}
-#save {top:25px;}
-#load {top:50px;}
+#fileButton {top:25px;}
+#files {position:absolute;left:10%;right:10%;background-color:rgb(97,2,116,0.5);height:4800px;top:200px;border-radius:50px;}
+#filesTitle {text-align:center;font-size:60px;font-family:arial;top:-50px;position:relative;color:white;font-weight:bold;}
+.file {text-align:center;font-size:30px;font-family:arial;top:-100px;position:relative;color:#bf1d1d;font-weight:bold;background-color:rgb(20,8,79,0.8);}
+#fileMenu {position:absolute;left:10%;right:10%;background-color:rgb(97,2,116);height:4800px;top:25px;border-radius:50px;}
+#fileMenuTitle {text-align:center;font-size:60px;font-family:arial;top:-50px;position:relative;color:white;font-weight:bold;}
+a {text-decoration:none;}
+#saveAs {text-align:center;font-size:30px;font-family:arial;top:400px;position:relative;color:#1F7FFF;font-weight:bold;background-color:rgb(40,8,39,0.8);}
+#saveAsMenu {position:absolute;left:10%;right:10%;background-color:rgb(97,2,116);height:4800px;top:50px;border-radius:50px;}
+.file::placeholder {color:rgb(150,50,0);}
+#saveAsButton {text-align:center;font-size:30px;font-family:arial;top:100px;position:relative;color:#1F7FFF;font-weight:bold;background-color:rgb(40,8,39,0.8);}
+#filesList {width:100%;position:absolute;height:500px;overflow:auto;top:80px;}
+#closeFilesMenu {background-color:black;color:red;position:absolute;right:0px;top:0px;width:80px;height:80px;border-top-right-radius:50px;border:none;font-family:arial;font-size:30px;padding:15px;}
 </style>
 </head>
 <body>
@@ -29,8 +40,7 @@ textarea {width:100%;max-width:100%;min-width:100%;height:300px;min-height:300px
 <div id="content" onclick="menu(this)"><div id="idCounter" style="display:none;">0</div></div>
 <div id="menuBackground">
 <button id="insert" onclick="insert(Number(document.getElementById('idCounter').innerHTML))">Insert object</button>
-<button id="save" onclick="localStorage.ccdesigncreatorsave = document.getElementById('content').innerHTML">Save</button>
-<button id="load" onclick="document.getElementById('content').innerHTML = localStorage.ccdesigncreatorsave">Load</button>
+<button id="fileButton" onclick="filesMenu()">File</button>
 </div>
 <div id="menu" style="display:none;">
 <br>
@@ -39,7 +49,7 @@ textarea {width:100%;max-width:100%;min-width:100%;height:300px;min-height:300px
 <div class="menuDiv"><span class="menuSpan">Background Color</span><br><input type="color" id="backgroundColor" value="#999999" oninput="document.getElementById('backgroundColorHex').innerHTML = this.value"><span class="hexColor" id="backgroundColorHex">#999999</span></div><br>
 <div class="menuDiv"><span class="menuSpan">Color</span><br><input type="color" id="color" value="#000000" oninput="document.getElementById('colorHex').innerHTML = this.value"><span class="hexColor" id="colorHex">#000000</span></div><br>
 <div class="menuDiv"><span class="menuSpan">Width (%)</span><br><input step="0.1" type="number" id="width" value="100"></div><br>
-<div class="menuDiv"><span class="menuSpan">Height (%)</span><br><input step="0.1" type="number" id="height" value="100"></div><br>
+<div class="menuDiv"><span class="menuSpan">Height (%)</span><br><input step="0.05" type="number" id="height" value="100"></div><br>
 <div class="menuDiv"><span class="menuSpan">Font: </span><br><input type="text" id="font" value="arial"></div><br>
 <div class="menuDiv"><span class="menuSpan">Font Size (pixels)</span><br><input type="number" id="fontSize" value="20"></div><br>
 <div class="menuDiv"><span class="menuSpan">Border Round (pixels)</span><br><input type="number" id="borderRound" value="0"></div><br>
@@ -48,6 +58,160 @@ textarea {width:100%;max-width:100%;min-width:100%;height:300px;min-height:300px
 <div class="menuDiv"><span class="menuSpan">Text Align</span><br><input type="text" id="textAlign" value="left"></div><br>
 <div class="menuDiv"><span class="menuSpan">Text</span><br><textarea id="text"></textarea></div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <div class="menuDiv"><button onclick="lockStyles()" id="lockStyles"><img src="LockOpen.png" id="styleLock" alt="open" style="width:60px;height:60px;"></button><br></div>
+</div>
+<div id="files" style="display:none;">
+<p id="filesTitle">Files</p>
+<button id="closeFilesMenu" onclick="closeFilesMenu()">X</button>
+<div id="filesList">
+<a href="#title"><p class="file" onclick="fileMenu(this.innerHTML)">this is a test file</p></a>
+<a href="#title"><p class="file" onclick="fileMenu(this.innerHTML)">this is a test file (2)</p></a>
+<a href="#title"><p class="file" onclick="fileMenu(this.innerHTML)">this is a test file (3)</p></a>
+</div>
+<p id="saveAs" onclick="saveAsMenu()">Save Current File</p>
+<div id="fileMenu" style="display:none;">
+<p id="fileMenuTitle"></p>
+<p class="file" onclick="fileSave()" style="top:-50px;">Save</p>
+<p class="file" onclick="fileLoad()" style="top:-50px;">Load</p>
+<p class="file" onclick="fileRemove()" style="top:-50px;">Remove</p>
+</div>
+<div id="saveAsMenu" style="display:none;">
+<input id="saveAsInput" class="file" style="height:40px;top:100px;" placeholder="[Name]">
+<p id="saveAsButton" onclick="saveAs()">Save</p>
+</div>
+<script>
+function filesMenu() {
+document.getElementById("files").style.display = "block";
+}
+
+function closeFilesMenu() {
+document.getElementById("files").style.display = "none";
+}
+
+function fileMenu(f) {
+document.getElementById("fileMenu").style.display = "block";
+document.getElementById("fileMenuTitle").innerHTML = f;
+}
+
+function setUp() {
+localStorage.ccdesigncreatornames = ""
+localStorage.ccdesigncreatorfiles = ""
+}
+
+function saveAsMenu() {
+document.getElementById("saveAsMenu").style.display = "block";
+}
+
+function fileLoad() {
+var c = document.getElementById("fileMenuTitle").innerHTML
+var f = document.getElementById("content")
+var names = localStorage.ccdesigncreatornames
+names = names.split("##ccdesigncreator##")
+var files = localStorage.ccdesigncreatorfiles
+files = files.split("##ccdesigncreator##")
+if(names.indexOf(c) != -1) {
+var i = names.indexOf(c)
+while(files[i] == "") {
+i = i + 1
+}
+f.innerHTML = files[i];
+document.getElementById("fileMenu").style.display = "none";
+document.getElementById("object").value = ""
+}
+else {
+alert("That file doesn't exist!")
+}
+}
+
+function fileSave() {
+var c = document.getElementById("fileMenuTitle").innerHTML
+var f = document.getElementById("content")
+var names = localStorage.ccdesigncreatornames
+names = names.split("##ccdesigncreator##")
+var files = localStorage.ccdesigncreatorfiles
+files = files.split("##ccdesigncreator##")
+if(names.indexOf(c) != -1) {
+files[names.indexOf(c)] = f.innerHTML;
+document.getElementById("fileMenu").style.display = "none";
+var i = 0;
+localStorage.ccdesigncreatorfiles = ""
+while(i < names.length) {
+localStorage.ccdesigncreatorfiles += files[i] + "##ccdesigncreator##"
+i += 1
+}
+}
+else {
+alert("That file doesn't exist!")
+}
+}
+
+function fileRemove() {
+var c = document.getElementById("fileMenuTitle").innerHTML
+var f = document.getElementById("content")
+var names = localStorage.ccdesigncreatornames
+names = names.split("##ccdesigncreator##")
+var files = localStorage.ccdesigncreatorfiles
+files = files.split("##ccdesigncreator##")
+if(names.indexOf(c) != -1) {
+names[names.indexOf(c)] = "##deleted##";
+files[names.indexOf(c)] = "##deleted##";
+document.getElementById("fileMenu").style.display = "none";
+var i = 0;
+localStorage.ccdesigncreatorfiles = ""
+localStorage.ccdesigncreatornames = ""
+while(i < names.length) {
+localStorage.ccdesigncreatorfiles += files[i] + "##ccdesigncreator##"
+localStorage.ccdesigncreatornames += names[i] + "##ccdesigncreator##"
+i += 1
+}
+}
+else {
+alert("That file doesn't exist!")
+}
+refreshFiles()
+}
+
+function saveAs() {
+var n = document.getElementById("saveAsInput").value;
+var f = document.getElementById("content")
+var names = localStorage.ccdesigncreatornames
+names = names.split("##ccdesigncreator##")
+if(names.indexOf(n) == -1) {
+localStorage.ccdesigncreatornames += n + "##ccdesigncreator##"
+localStorage.ccdesigncreatorfiles += f.innerHTML + "##ccdesigncreator##"
+}
+else {
+alert("This file already exists!")
+}
+
+document.getElementById("saveAsMenu").style.display = "none";
+
+refreshFiles()
+
+}
+function refreshFiles() {
+var f = document.getElementById("content");
+var names = localStorage.ccdesigncreatornames;
+var filesList = document.getElementById("filesList");
+names = names.split("##ccdesigncreator##");
+var i = 0;
+filesList.innerHTML = ""
+while(i < names.length) {
+if(names[i] != "##deleted##") {
+filesList.innerHTML = filesList.innerHTML + '<a href="#title"><p class="file" onclick="fileMenu(this.innerHTML)" style="top:10px;">'+names[i]+'</p></a>';
+}
+i += 1
+}
+}
+
+
+if(localStorage.getItem('ccdesigncreatornames') == null) {
+setUp()
+refreshFiles()
+}
+else {
+refreshFiles()
+}
+</script>
 </div>
 <script>
 sessionStorage.move = "false"
